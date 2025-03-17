@@ -1,0 +1,56 @@
+---
+title: "Dify"
+description: "了解如何在 Dify 上使用 Firecrawl"
+og:title: "Dify | Firecrawl"
+og:description: "了解如何在 Dify 上使用 Firecrawl"
+---
+
+## 为 Dify 工作流同步网站数据
+
+Firecrawl 可以在 [Dify LLM 工作流构建器](https://cloud.dify.ai/) 内部使用。本页介绍如何从网页抓取数据，将其解析为 Markdown，并使用 Firecrawl 集成将其导入到 Dify 知识库中。
+
+### 配置 Firecrawl
+
+首先，您需要在设置页面的数据源部分配置 Firecrawl 凭据。
+
+<img
+  className="block"
+  src="/images/fc_dify_config.avif"
+  alt="配置 Firecrawl 密钥"
+/>
+
+登录您的 Firecrawl 账户并获取 API 密钥，然后在 Dify 中输入并保存。
+
+<img
+  className="block"
+  src="/images/fc_dify_savekey.png"
+  alt="保存 Firecrawl 密钥"
+/>
+
+### 抓取目标网页
+
+现在是有趣的部分，抓取和爬取。在知识库创建页面上，选择从网站同步并输入要抓取的 URL。
+
+<img
+  className="block"
+  src="/images/fc_dify_webscrape.webp"
+  alt="抓取设置"
+/>
+
+配置选项包括：是否爬取子页面、页面爬取限制、页面抓取最大深度、排除路径、仅包含路径和内容提取范围。完成配置后，点击运行以预览解析的页面。
+
+<img
+  className="block"
+  src="/images/fc_dify_fcoptions.webp"
+  alt="设置 Firecrawl 配置"
+/>
+
+### 查看导入结果
+
+从网页导入解析的文本后，它会存储在知识库文档中。查看导入结果并点击添加 URL 继续导入新的网页。
+
+<img
+  className="block"
+  src="/images/fc_dify_results.webp"
+  alt="查看 Firecrawl 抓取的结果"
+/>

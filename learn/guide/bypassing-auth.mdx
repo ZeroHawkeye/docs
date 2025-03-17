@@ -1,0 +1,131 @@
+---
+title: "绕过认证进行爬取"
+description: "学习如何通过转发cookies绕过网站认证。"
+og:title: "绕过认证进行爬取 | Firecrawl"
+og:description: "学习如何通过转发cookies绕过网站认证。"
+---
+
+> 注意：此示例使用的是 [Firecrawl API 的 v0 版本](/v0/introduction)。您可以安装 Python SDK 的 0.0.20 版本或 Node SDK 的 0.0.36 版本。
+
+
+使用 Firecrawl，您可以在请求头中发送 cookies 来绕过网站认证。当您需要爬取需要登录的网站内容时，这非常有用。
+
+### 示例
+
+要绕过认证，您需要在请求中包含 `headers` 参数，并设置带有适当 cookie 值的 `Cookies` 头，这些值可以从浏览器的 cookies 中获取。如果您需要帮助获取 cookies，请查看这篇文章：[获取 cookies](https://cookie-script.com/documentation/how-to-check-cookies-on-chrome-and-firefox)
+
+<CodeGroup>
+
+```bash Python
+pip install firecrawl-py
+```
+
+```bash JavaScript
+npm install @mendable/firecrawl-js
+```
+
+```bash Go
+go get github.com/mendableai/firecrawl-go
+```
+
+</CodeGroup>
+
+### 使用方法
+ 
+<CodeGroup>
+
+```python Python
+from firecrawl import FirecrawlApp
+
+app = FirecrawlApp(api_key="YOUR_API_KEY")
+
+app.scrape_url("https://docs.firecrawl.dev", {
+  pageOptions:{
+    headers:{
+      "Cookie": "cookie1=value1; cookie2=value2"
+    }
+  }
+})
+```
+
+```javascript JavaScript
+import { FirecrawlApp } from 'firecrawl-js';
+
+const app = new FirecrawlApp({ apiKey: 'YOUR_API_KEY' });
+
+app.scrapeUrl('https://docs.firecrawl.dev', {
+  pageOptions:{
+    headers:{
+      "Cookie": "cookie1=value1; cookie2=value2"
+    }
+  }
+});
+```
+
+```go Go
+import (
+  "fmt"
+  "log"
+
+  "github.com/mendableai/firecrawl-go"
+)
+
+func main() {
+  // 使用您的 API key 初始化 FirecrawlApp
+  app, err := firecrawl.NewFirecrawlApp("YOUR_API_KEY")
+  if err != nil {
+    log.Fatalf("初始化 FirecrawlApp 失败: %v", err)
+  }
+
+  params := map[string]any{
+    "pageOptions": map[string]any{
+      "headers": map[string]any{
+        "Cookie": "cookie1=value1; cookie2=value2"
+      }
+    },
+  }
+  scrapedData, err := app.ScrapeURL("docs.firecrawl.dev", params)
+  if err != nil {
+    log.Fatalf("爬取过程中发生错误: %v", err)
+  }
+  fmt.Println(scrapedData)
+}
+```
+
+```rust Rust
+use firecrawl::FirecrawlApp;
+
+#[tokio::main]
+async fn main() {
+    let api_key = "YOUR_API_KEY";
+    let api_url = "https://api.firecrawl.dev";
+    let app = FirecrawlApp::new(api_key, api_url).expect("初始化 FirecrawlApp 失败");
+
+    let scrape_params = json!({
+        "pageOptions": {
+            "headers": {
+                "Cookie": "cookie1=value1; cookie2=value2"
+            }
+        }
+    });
+
+    let scrape_result = app.scrape_url("https://docs.firecrawl.dev", Some(scrape_params)).await;
+    match scrape_result {
+        Ok(data) => println!("爬取结果:\n{}", data),
+        Err(e) => eprintln!("爬取失败: {}", e),
+    }
+}
+```
+
+```curl cURL
+curl -X POST https://api.firecrawl.dev/v0/scrape \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer YOUR_API_KEY' \
+    -d '{
+      "url": "https://example.com",
+      "headers": {
+        "Cookie": "cookie1=value1; cookie2=value2"
+      }
+    }'
+```
+</CodeGroup>

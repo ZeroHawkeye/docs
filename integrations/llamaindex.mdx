@@ -1,0 +1,68 @@
+---
+title: 'Llamaindex'
+description: 'Firecrawl 与 LlamaIndex 集成作为文档阅读器。'
+og:title: "Llamaindex | Firecrawl"
+og:description: "Firecrawl 与 LlamaIndex 集成作为文档阅读器。"
+---
+
+> 注意：此集成仍在使用 [Firecrawl API 的 v0 版本](/v0/introduction)。您可以安装 Python SDK 的 0.0.20 版本或 Node SDK 的 0.0.36 版本。
+
+
+## 安装
+
+```bash
+pip install firecrawl-py==0.0.20 llama_index llama-index llama-index-readers-web
+
+```
+
+## 使用方法
+
+### 使用 FireCrawl 抓取整个网站
+
+```python
+from llama_index.readers.web import FireCrawlWebReader
+from llama_index.core import SummaryIndex
+import os
+
+
+# 初始化 FireCrawlWebReader 来爬取网站
+firecrawl_reader = FireCrawlWebReader(
+    api_key="<your_api_key>",  # 替换为您从 https://www.firecrawl.dev/ 获取的实际 API 密钥
+    mode="scrape",  # 在"crawl"和"scrape"之间选择，用于单页抓取
+    params={"additional": "parameters"}  # 可选的额外参数
+)
+
+# 设置虚拟密钥的环境变量
+os.environ["OPENAI_API_KEY"] = "<OPENAI_API_KEY>"
+
+# 从单个页面 URL 加载文档
+documents = firecrawl_reader.load_data(url="http://paulgraham.com/")
+index = SummaryIndex.from_documents(documents)
+
+# 将日志设置为 DEBUG 以获取更详细的输出
+query_engine = index.as_query_engine()
+response = query_engine.query("What did the author do growing up?")
+display(Markdown(f"<b>{response}</b>"))
+```
+
+### 使用 FireCrawl 抓取单个页面
+
+```python
+from llama_index.readers.web import FireCrawlWebReader
+
+# 使用您的 API 密钥和所需模式初始化 FireCrawlWebReader
+firecrawl_reader = FireCrawlWebReader(
+    api_key="<your_api_key>",  # 替换为您从 https://www.firecrawl.dev/ 获取的实际 API 密钥
+    mode="scrape",  # 在"crawl"和"scrape"之间选择
+    params={"additional": "parameters"}  # 可选的额外参数
+)
+
+# 从指定 URL 加载文档
+documents = firecrawl_reader.load_data(url="http://paulgraham.com/worked.html")
+index = SummaryIndex.from_documents(documents)
+
+# 将日志设置为 DEBUG 以获取更详细的输出
+query_engine = index.as_query_engine()
+response = query_engine.query("What did the author do growing up?")
+display(Markdown(f"<b>{response}</b>"))
+```

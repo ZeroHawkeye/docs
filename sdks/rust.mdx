@@ -1,0 +1,63 @@
+---
+title: 'Rust'
+description: 'Firecrawl Rust SDK是一个库，帮助您轻松抓取和爬取网站，并以适合语言模型(LLMs)使用的格式输出数据。'
+icon: 'rust'
+og:title: "Rust SDK | Firecrawl"
+og:description: "Firecrawl Rust SDK是一个库，帮助您轻松抓取和爬取网站，并以适合语言模型(LLMs)使用的格式输出数据。"
+---
+
+import InstallationRust from '/snippets/v1/installation/rust.mdx'
+import ScrapeAndCrawlRustExample from '/snippets/v1/scrape-and-crawl/rust.mdx'
+import ScrapeRustShort from '/snippets/v1/scrape/short/rust.mdx'
+import CrawlRustShort from '/snippets/v1/crawl/short/rust.mdx'
+import CrawlAsyncRustShort from '/snippets/v1/crawl-async/short/rust.mdx'
+import MapRustShort from '/snippets/v1/map/short/rust.mdx'
+import LLMExtractRust from '/snippets/v1/llm-extract/base/rust.mdx'
+
+## 安装
+
+要安装Firecrawl Rust SDK，请在您的`Cargo.toml`中添加以下内容：
+
+<InstallationRust />
+
+## 使用方法
+
+首先，您需要从[firecrawl.dev](https://firecrawl.dev)获取API密钥。然后，您需要初始化`FirecrawlApp`。之后，您可以访问像`FirecrawlApp::scrape_url`这样的函数，让您使用我们的API。
+
+以下是如何在Rust中使用SDK的示例：
+
+<ScrapeAndCrawlRustExample />
+
+### 抓取单个URL
+
+要抓取单个URL，请使用`scrape_url`方法。它接受URL作为参数，并以`Document`形式返回抓取的数据。
+
+<ScrapeRustShort />
+
+### 使用Extract抓取
+
+使用Extract，您可以轻松地从任何URL提取结构化数据。您需要使用`serde_json::json!`宏以JSON Schema格式指定您的模式。
+
+<LLMExtractRust />
+
+### 爬取网站
+
+要爬取网站，请使用`crawl_url`方法。这将等待爬取完成，根据您的起始URL和选项，可能需要很长时间。
+
+<CrawlRustShort />
+
+#### 异步爬取
+
+要在不等待结果的情况下爬取，请使用`crawl_url_async`方法。它接受相同的参数，但返回一个包含爬取ID的`CrawlAsyncRespone`结构体。您可以随时使用该ID和`check_crawl_status`方法检查状态。请注意，已完成的爬取会在24小时后删除。
+
+<CrawlAsyncRustShort />
+
+### 映射URL（Alpha版）
+
+从起始URL映射所有相关链接。
+
+<MapRustShort />
+
+## 错误处理
+
+SDK处理Firecrawl API和我们的依赖项返回的错误，并将它们组合到实现了`Error`、`Debug`和`Display`的`FirecrawlError`枚举中。我们所有的方法都返回`Result<T, FirecrawlError>`。

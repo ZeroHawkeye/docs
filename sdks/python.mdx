@@ -1,0 +1,79 @@
+---
+title: 'Python'
+description: 'Firecrawl Python SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。'
+icon: 'python'
+og:title: "Python SDK | Firecrawl"
+og:description: "Firecrawl Python SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。"
+---
+
+import InstallationPython from '/snippets/v1/installation/python.mdx'
+import ScrapePythonShort from '/snippets/v1/scrape/short/python.mdx'
+import CrawlPythonShort from '/snippets/v1/crawl/short/python.mdx'
+import CheckCrawlStatusPythonShort from '/snippets/v1/crawl-status/short/python.mdx'
+import CrawlAsyncPythonShort from '/snippets/v1/crawl-async/short/python.mdx'
+import CancelCrawlPythonShort from '/snippets/v1/crawl-delete/short/python.mdx'
+import MapPythonShort from '/snippets/v1/map/short/python.mdx'
+import ScrapeAndCrawlExamplePython from '/snippets/v1/scrape-and-crawl/python.mdx'
+import CrawlWebSocketPythonBase from '/snippets/v1/crawl-websocket/base/python.mdx'
+
+## 安装
+
+要安装Firecrawl Python SDK，您可以使用pip：
+
+<InstallationPython />
+
+## 使用方法
+
+1. 从[firecrawl.dev](https://firecrawl.dev)获取API密钥
+2. 将API密钥设置为名为`FIRECRAWL_API_KEY`的环境变量，或者将其作为参数传递给`FirecrawlApp`类。
+
+以下是如何使用SDK的示例：
+
+<ScrapeAndCrawlExamplePython />
+
+### 抓取单个URL
+
+要抓取单个URL，请使用`scrape_url`方法。它接受URL作为参数，并以字典形式返回抓取的数据。
+
+<ScrapePythonShort />
+
+### 爬取网站
+
+要爬取网站，请使用`crawl_url`方法。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlPythonShort />
+
+### 异步爬取
+
+要异步爬取网站，请使用`crawl_url_async`方法。它返回爬取`ID`，您可以使用该ID检查爬取任务的状态。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlAsyncPythonShort />
+
+
+### 检查爬取状态
+
+要检查爬取任务的状态，请使用`check_crawl_status`方法。它接受任务ID作为参数，并返回爬取任务的当前状态。
+
+<CheckCrawlStatusPythonShort />
+
+### 取消爬取
+
+要取消异步爬取任务，请使用`cancel_crawl`方法。它接受异步爬取的任务ID作为参数，并返回取消状态。
+
+<CancelCrawlPythonShort />
+
+### 映射网站
+
+使用`map_url`生成网站的URL列表。`params`参数允许您自定义映射过程，包括排除子域名或使用网站地图的选项。
+
+<MapPythonShort />
+
+### 使用WebSockets爬取网站
+
+要使用WebSockets爬取网站，请使用`crawl_url_and_watch`方法。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlWebSocketPythonBase />
+
+## 错误处理
+
+SDK处理Firecrawl API返回的错误并引发适当的异常。如果在请求期间发生错误，将引发带有描述性错误消息的异常。

@@ -1,0 +1,214 @@
+---
+title: "抓取"
+description: "将任何URL转换为干净的数据"
+icon: "markdown"
+og:title: "抓取 | Firecrawl"
+og:description: "将任何URL转换为干净的数据"
+---
+
+import InstallationPython from "/snippets/v1/installation/python.mdx";
+import InstallationNode from "/snippets/v1/installation/js.mdx";
+import InstallationGo from "/snippets/v1/installation/go.mdx";
+import InstallationRust from "/snippets/v1/installation/rust.mdx";
+import ScrapePython from "/snippets/v1/scrape/base/python.mdx";
+import ScrapeNode from "/snippets/v1/scrape/base/js.mdx";
+import ScrapeGo from "/snippets/v1/scrape/base/go.mdx";
+import ScrapeRust from "/snippets/v1/scrape/base/rust.mdx";
+import ScrapeCURL from "/snippets/v1/scrape/base/curl.mdx";
+import ScrapeResponse from "/snippets/v1/scrape/base/output.mdx";
+import ExtractCURL from "/snippets/v1/llm-extract/base/curl.mdx";
+import ExtractPython from "/snippets/v1/llm-extract/base/python.mdx";
+import ExtractNode from "/snippets/v1/llm-extract/base/js.mdx";
+import ExtractOutput from "/snippets/v1/llm-extract/base/output.mdx";
+import ExtractNoSchemaCURL from "/snippets/v1/llm-extract/no-schema/curl.mdx";
+import ExtractNoSchemaOutput from "/snippets/v1/llm-extract/no-schema/output.mdx";
+import ScrapeActionsPython from "/snippets/v1/scrape/actions/python.mdx";
+import ScrapeActionsNode from "/snippets/v1/scrape/actions/js.mdx";
+import ScrapeActionsCURL from "/snippets/v1/scrape/actions/curl.mdx";
+import ScrapeActionsOutput from "/snippets/v1/scrape/actions/output.mdx";
+import BatchScrapePython from "/snippets/v1/batch-scrape/base/python.mdx";
+import BatchScrapeNode from "/snippets/v1/batch-scrape/base/js.mdx";
+import BatchScrapeCURL from "/snippets/v1/batch-scrape/base/curl.mdx";
+import BatchScrapeOutput from "/snippets/v1/batch-scrape/base/output.mdx";
+import BatchScrapeAsyncOutput from "/snippets/v1/batch-scrape/base/async-output.mdx";
+import ScrapeLocationPython from "/snippets/v1/scrape/location/python.mdx";
+import ScrapeLocationNode from "/snippets/v1/scrape/location/js.mdx";
+import ScrapeLocationCURL from "/snippets/v1/scrape/location/curl.mdx";
+
+Firecrawl将网页转换为markdown，非常适合LLM应用。
+
+- 它管理复杂性：代理、缓存、速率限制、js阻止的内容
+- 处理动态内容：动态网站、js渲染的网站、PDF、图像
+- 输出干净的markdown、结构化数据、截图或html。
+
+详情请参阅[抓取端点API参考](https://docs.firecrawl.dev/api-reference/endpoint/scrape)。
+
+
+## 使用Firecrawl抓取URL
+
+### /scrape 端点
+
+用于抓取URL并获取其内容。
+
+### 安装 
+
+<CodeGroup>
+
+  <InstallationPython />
+
+  <InstallationNode />
+
+  <InstallationGo />
+  
+  <InstallationRust />
+
+</CodeGroup>
+
+### 使用方法
+
+<CodeGroup>
+
+  <ScrapePython />
+
+  <ScrapeNode />
+
+  <ScrapeGo />
+
+  <ScrapeRust />
+
+  <ScrapeCURL />
+
+</CodeGroup>
+
+有关参数的更多详细信息，请参阅[API参考](https://docs.firecrawl.dev/api-reference/endpoint/scrape)。
+
+### 响应
+
+SDK将直接返回数据对象。cURL将返回与下面完全相同的有效负载。
+
+<ScrapeResponse />
+
+## 提取结构化数据
+
+### /scrape（带extract）端点
+
+用于从抓取的页面中提取结构化数据。
+
+<CodeGroup>
+
+<ExtractPython />
+<ExtractNode />
+<ExtractCURL />
+
+</CodeGroup>
+
+输出：
+
+<ExtractOutput />
+
+### 无模式提取（新功能）
+
+现在您可以通过仅向端点传递`prompt`来进行无模式提取。LLM会选择数据的结构。
+
+<CodeGroup>
+
+<ExtractNoSchemaCURL />
+
+</CodeGroup>
+
+输出：
+
+<ExtractNoSchemaOutput />
+
+### Extract对象
+
+`extract`对象接受以下参数：
+
+- `schema`：用于提取的模式。
+- `systemPrompt`：用于提取的系统提示。
+- `prompt`：用于无模式提取的提示。
+
+
+
+## 使用Actions与页面交互
+
+Firecrawl允许您在抓取内容之前对网页执行各种操作。这对于与动态内容交互、在页面之间导航或访问需要用户交互的内容特别有用。
+
+以下是如何使用actions导航到google.com，搜索Firecrawl，点击第一个结果并截图的示例。
+
+在执行其他操作之前/之后使用`wait`操作几乎总是很重要的，以便给页面足够的加载时间。
+
+### 示例
+<CodeGroup>
+
+<ScrapeActionsPython />
+<ScrapeActionsNode /> 
+<ScrapeActionsCURL />
+
+</CodeGroup>
+### 输出
+
+<CodeGroup>
+
+<ScrapeActionsOutput />
+
+
+</CodeGroup>
+有关actions参数的更多详细信息，请参阅[API参考](https://docs.firecrawl.dev/api-reference/endpoint/scrape)。
+
+
+
+## 批量抓取多个URL
+
+您现在可以同时批量抓取多个URL。它接受起始URL和可选参数作为参数。params参数允许您为批量抓取任务指定其他选项，例如输出格式。
+
+### 工作原理
+
+它与`/crawl`端点的工作方式非常相似。它提交一个批量抓取任务并返回一个任务ID，用于检查批量抓取的状态。
+
+SDK提供了2种方法，同步和异步。同步方法将返回批量抓取任务的结果，而异步方法将返回一个任务ID，您可以使用它来检查批量抓取的状态。
+
+### 使用方法
+
+<CodeGroup>
+
+<BatchScrapePython />
+<BatchScrapeNode />
+<BatchScrapeCURL />
+
+</CodeGroup>
+
+### 响应
+
+如果您使用SDK的同步方法，它将返回批量抓取任务的结果。否则，它将返回一个任务ID，您可以使用它来检查批量抓取的状态。
+
+#### 同步
+
+<BatchScrapeOutput />
+
+#### 异步
+
+然后，您可以使用任务ID通过调用`/batch/scrape/{id}`端点来检查批量抓取的状态。此端点旨在在任务仍在运行或刚刚完成时使用**，因为批量抓取任务在24小时后过期**。
+
+<BatchScrapeAsyncOutput />
+
+## 位置和语言
+
+指定国家和首选语言，根据您的目标位置和语言偏好获取相关内容。
+
+### 工作原理
+
+当您指定位置设置时，Firecrawl将使用适当的代理（如果可用）并模拟相应的语言和时区设置。默认情况下，如果未指定，位置设置为'US'。
+
+### 使用方法
+
+要使用位置和语言设置，请在请求正文中包含具有以下属性的`location`对象：
+
+- `country`：ISO 3166-1 alpha-2国家代码（例如，'US'、'AU'、'DE'、'JP'）。默认为'US'。
+- `languages`：请求的首选语言和区域设置数组，按优先级排序。默认为指定位置的语言。
+
+<CodeGroup>
+<ScrapeLocationPython />
+<ScrapeLocationNode />
+<ScrapeLocationCURL />
+</CodeGroup>

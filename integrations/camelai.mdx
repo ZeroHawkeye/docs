@@ -1,0 +1,44 @@
+---
+title: "Camel AI"
+description: "Firecrawl 与 Camel AI 集成作为数据加载器。"
+og:title: "Camel AI | Firecrawl"
+og:description: "Firecrawl 与 Camel AI 集成作为数据加载器。"
+---
+
+## 安装
+
+```bash
+pip install camel-ai
+
+```
+
+## 使用方法
+
+通过 Camel AI 和 Firecrawl，您可以快速构建使用网络数据的多智能体系统。
+
+### 使用 Firecrawl 抓取整个网站
+
+```python
+mock_app = MockFirecrawlApp.return_value
+firecrawl = Firecrawl(
+    api_key='FC_API_KEY', api_url='https://api.test.com'
+)
+url = 'https://example.com'
+response = [{'markdown': 'Markdown content'}]
+mock_app.crawl_url.return_value = respons
+result = firecrawl.markdown_crawl(url)
+```
+
+### 使用 Firecrawl 抓取单个页面
+
+```python
+mock_app = MockFirecrawlApp.return_value
+firecrawl = Firecrawl(
+    api_key='test_api_key', api_url='https://api.test.com'
+)
+url = 'https://example.com'
+response = 'Scraped content'
+mock_app.scrape_url.return_value = response
+
+result = firecrawl.scrape(url)
+```

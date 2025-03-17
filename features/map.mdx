@@ -1,0 +1,95 @@
+---
+title: '映射'
+description: '输入一个网站并极速获取网站上的所有URL'
+icon: 'map'
+og:title: "映射 | Firecrawl"
+og:description: "从单个URL到整个网站的映射"
+version: "v1"
+sidebarTitle: "映射 (Alpha)"
+---
+
+import InstallationPython from "/snippets/v1/installation/python.mdx";
+import InstallationJavaScript from "/snippets/v1/installation/js.mdx";
+import InstallationGo from "/snippets/v1/installation/go.mdx";
+import InstallationRust from "/snippets/v1/installation/rust.mdx";
+import MapPython from "/snippets/v1/map/base/python.mdx";
+import MapJavaScript from "/snippets/v1/map/base/js.mdx";
+import MapGo from "/snippets/v1/map/base/go.mdx";
+import MapRust from "/snippets/v1/map/base/rust.mdx";
+import MapCURL from "/snippets/v1/map/base/curl.mdx";
+import MapResponse from "/snippets/v1/map/base/output.mdx";
+
+## 介绍 /map (Alpha)
+
+从单个URL到整个网站映射的最简单方法。这对以下情况非常有用：
+- 当您需要提示最终用户选择要抓取的链接时
+- 需要快速了解网站上的链接
+- 需要抓取与特定主题相关的网站页面（使用`search`参数）
+- 只需要抓取网站的特定页面
+
+## Alpha版本考虑因素
+
+此端点优先考虑速度，因此可能无法捕获所有网站链接。我们正在改进中。非常欢迎反馈和建议。
+
+
+## 映射
+
+### /map 端点
+
+用于映射URL并获取网站的URL。这将返回网站上存在的大多数链接。
+
+
+### 安装 
+
+<CodeGroup>
+
+<InstallationPython />
+<InstallationJavaScript />
+<InstallationGo />
+<InstallationRust />
+
+</CodeGroup>
+
+### 使用方法
+
+<CodeGroup>
+
+<MapPython />
+<MapJavaScript />
+<MapGo />
+<MapRust />
+<MapCURL />
+
+</CodeGroup>
+
+### 响应
+
+SDK将直接返回数据对象。cURL将返回与下面完全相同的有效负载。
+
+<MapResponse />
+
+#### 带搜索的映射
+
+带`search`参数的映射允许您在网站内搜索特定URL。
+
+```bash cURL
+curl -X POST https://api.firecrawl.dev/v1/map \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer YOUR_API_KEY' \
+    -d '{
+      "url": "https://firecrawl.dev",
+      "search": "docs"
+    }'
+```
+
+响应将是一个从最相关到最不相关排序的列表。
+
+```json
+{
+  "status": "success",
+  "links": [
+    "https://docs.firecrawl.dev",
+    "https://docs.firecrawl.dev/sdks/python",
+    "https://docs.firecrawl.dev/learn/rag-llama3",
+  ]
+}

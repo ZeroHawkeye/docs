@@ -1,0 +1,78 @@
+---
+title: 'Node'
+description: 'Firecrawl Node SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。'
+icon: 'node'
+og:title: "Node SDK | Firecrawl"
+og:description: "Firecrawl Node SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。"
+---
+
+import InstallationNode from '/snippets/v1/installation/js.mdx'
+import ScrapeAndCrawlExampleNode from '/snippets/v1/scrape-and-crawl/js.mdx'
+import ScrapeNodeShort from '/snippets/v1/scrape/short/js.mdx'
+import CrawlNodeShort from '/snippets/v1/crawl/short/js.mdx'
+import CrawlAsyncNodeShort from '/snippets/v1/crawl-async/short/js.mdx'
+import CheckCrawlStatusNodeShort from '/snippets/v1/crawl-status/short/js.mdx'
+import CancelCrawlNodeShort from '/snippets/v1/crawl-delete/short/js.mdx'
+import MapNodeShort from '/snippets/v1/map/short/js.mdx'
+import CrawlWebSocketNodeBase from '/snippets/v1/crawl-websocket/base/js.mdx'
+
+## 安装
+
+要安装Firecrawl Node SDK，您可以使用npm：
+
+<InstallationNode />
+
+## 使用方法
+
+1. 从[firecrawl.dev](https://firecrawl.dev)获取API密钥
+2. 将API密钥设置为名为`FIRECRAWL_API_KEY`的环境变量，或者将其作为参数传递给`FirecrawlApp`类。
+
+以下是如何使用带有错误处理的SDK的示例：
+
+<ScrapeAndCrawlExampleNode />
+
+### 抓取单个URL
+
+要使用错误处理抓取单个URL，请使用`scrapeUrl`方法。它接受URL作为参数，并以字典形式返回抓取的数据。
+
+<ScrapeNodeShort />
+
+### 爬取网站
+
+要使用错误处理爬取网站，请使用`crawlUrl`方法。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlNodeShort />
+
+### 异步爬取
+
+要异步爬取网站，请使用`crawlUrlAsync`方法。它返回爬取`ID`，您可以使用该ID检查爬取任务的状态。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlAsyncNodeShort />
+
+### 检查爬取状态
+
+要使用错误处理检查爬取任务的状态，请使用`checkCrawlStatus`方法。它接受`ID`作为参数，并返回爬取任务的当前状态。
+
+<CheckCrawlStatusNodeShort />
+
+### 取消爬取
+
+要取消异步爬取任务，请使用`cancelCrawl`方法。它接受异步爬取的任务ID作为参数，并返回取消状态。
+
+<CancelCrawlNodeShort />
+
+### 映射网站
+
+要使用错误处理映射网站，请使用`mapUrl`方法。它接受起始URL作为参数，并以字典形式返回映射数据。
+
+<MapNodeShort />
+
+### 使用WebSockets爬取网站
+
+要使用WebSockets爬取网站，请使用`crawlUrlAndWatch`方法。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlWebSocketNodeBase />
+
+## 错误处理
+
+SDK处理Firecrawl API返回的错误并引发适当的异常。如果在请求期间发生错误，将引发带有描述性错误消息的异常。上面的示例演示了如何使用`try/catch`块处理这些错误。

@@ -1,0 +1,57 @@
+---
+title: "使用 Firecrawl 和 E2B 抓取、分析和可视化 Airbnb 数据"
+description: "以下是如何自己运行这个示例"
+og:title: "使用 Firecrawl 和 E2B 抓取、分析和可视化 Airbnb 数据"
+og:description: "以下是如何自己运行这个示例"
+---
+
+> 注意：此示例使用的是 [Firecrawl API 的 v0 版本](/v0/introduction)。您可以安装 Python SDK 的 0.0.20 版本或 Node SDK 的 0.0.36 版本。
+
+> [GitHub 仓库 (https://github.com/e2b-dev/e2b-cookbook) ](https://github.com/e2b-dev/e2b-cookbook/tree/main/examples/scrape-and-analyze-airbnb-data-with-firecrawl)
+
+这个示例演示了如何使用 [Firecrawl](https://www.firecrawl.dev/) 和 E2B 的 [Code Interpreter SDK](https://github.com/e2b-dev/code-interpreter) 抓取并分析 Airbnb 数据。
+
+我们不会自己编写任何分析代码，而是让 Anthropic 的 AI 为我们编写。我们将使用 E2B 的 Code Interpreter SDK 安全地运行代码并获取结果。
+
+<img
+  className="block"
+  src="/images/airbnb_prices_chart.png"
+  alt="使用 Firecrawl 和 E2B 抓取和分析 Airbnb 数据"
+/>
+
+## 前提条件
+
+- 在您的机器上安装 Node.js
+- E2B API 密钥
+- Firecrawl API 密钥
+- Anthropic API 密钥
+
+## 设置和运行
+
+### 1. 克隆仓库
+
+这是本示例的 [GitHub 仓库](https://github.com/e2b-dev/e2b-cookbook/tree/main/examples/scrape-and-analyze-airbnb-data-with-firecrawl)。
+
+```
+git clone https://github.com/e2b-dev/e2b-cookbook.git
+cd e2b-cookbook/examples/scrape-and-analyze-airbnb-data-with-firecrawl
+```
+
+### 2. 安装依赖
+
+```
+npm install
+```
+
+### 3. 设置 `.env`
+
+1. 复制 `.env.template` 到 `.env`
+2. 获取 [E2B API 密钥](https://e2b.dev/docs/getting-started/api-key)
+3. 获取 [Firecrawl API 密钥](https://firecrawl.dev)
+4. 获取 [Anthropic API 密钥](https://anthropic.com)
+
+### 4. 运行示例
+
+```
+npm run start
+```

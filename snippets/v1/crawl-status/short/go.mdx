@@ -1,0 +1,10 @@
+```go Go
+// 获取爬取任务状态
+crawlStatus, err := app.CheckCrawlStatus("<crawl_id>")
+
+if err != nil {
+  log.Fatalf("Failed to get crawl status: %v", err)
+}
+
+fmt.Println(crawlStatus)
+```

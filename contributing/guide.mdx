@@ -1,0 +1,169 @@
+---
+title: "本地运行"
+description: "了解如何在本地运行Firecrawl，以便自行使用和/或为项目做出贡献。"
+og:title: "本地运行 | Firecrawl"
+og:description: "了解如何在本地运行Firecrawl，以便自行使用和/或为项目做出贡献。"
+---
+
+欢迎来到[Firecrawl](https://firecrawl.dev) 🔥！以下是如何在本地获取项目以便自行运行和做出贡献的说明。
+
+如果您正在贡献代码，请注意该过程与其他开源仓库类似，即fork Firecrawl，进行更改，运行测试，提交PR。
+
+如果您有任何问题或需要帮助入门，请加入我们的Discord社区[点击这里](https://discord.gg/gSmWdAkdwd)获取更多信息，或在Github[这里](https://github.com/mendableai/firecrawl/issues/new/choose)提交问题！
+
+## 在本地运行项目
+
+首先，安装依赖项：
+1. node.js [安装说明](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
+2. pnpm [安装说明](https://pnpm.io/installation)
+3. redis [安装说明](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/) 
+
+
+在`/apps/api/`目录中的`.env`文件中设置环境变量。您可以复制`.env.example`中的模板。
+
+开始时，我们不会设置身份验证或任何可选的子服务（PDF解析、JS阻止支持、AI功能）
+
+```
+# ./apps/api/.env
+
+# ===== 必需的环境变量 ======
+NUM_WORKERS_PER_QUEUE=8 
+PORT=3002
+HOST=0.0.0.0
+
+#使用docker自托管时，使用redis://redis:6379。本地运行时，使用redis://localhost:6379
+REDIS_URL=redis://localhost:6379
+
+#使用docker自托管时，使用redis://redis:6379。本地运行时，使用redis://localhost:6379
+REDIS_RATE_LIMIT_URL=redis://localhost:6379 
+PLAYWRIGHT_MICROSERVICE_URL=http://playwright-service:3000/html
+
+## 要启用数据库身份验证，您需要设置supabase。
+USE_DB_AUTHENTICATION=false
+
+# ===== 可选的环境变量 ======
+
+# Supabase设置（用于支持数据库身份验证、高级日志记录等）
+SUPABASE_ANON_TOKEN= 
+SUPABASE_URL= 
+SUPABASE_SERVICE_TOKEN=
+
+# 其他可选项
+# 如果您已设置身份验证并想使用真实的API密钥进行测试
+TEST_API_KEY=
+# 如果您想测试抓取速率限制，请设置
+RATE_LIMIT_TEST_API_KEY_SCRAPE=
+# 如果您想测试爬取速率限制，请设置
+RATE_LIMIT_TEST_API_KEY_CRAWL=
+# 如果您想使用Scraping Bee处理JS阻止，请设置
+SCRAPING_BEE_API_KEY=
+# 添加用于LLM依赖功能（图像alt生成等）
+OPENAI_API_KEY=
+BULL_AUTH_KEY=@
+# 如果您正在使用logtail配置基本日志记录，请使用
+LOGTAIL_KEY=
+# 如果您有想用于解析PDF的llamaparse密钥，请设置
+LLAMAPARSE_API_KEY=
+# 如果您想发送slack服务器健康状态消息，请设置
+SLACK_WEBHOOK_URL=
+# 如果您想发送posthog事件（如作业日志），请设置
+POSTHOG_API_KEY=
+# 如果您想发送posthog事件（如作业日志），请设置
+POSTHOG_HOST=
+
+# 如果您想使用fire engine封闭测试版，请设置
+FIRE_ENGINE_BETA_URL=
+
+# Playwright的代理设置（或者您可以使用像oxylabs这样的代理服务，它会在每个请求上轮换IP）
+PROXY_SERVER=
+PROXY_USERNAME=
+PROXY_PASSWORD=
+# 如果您想阻止媒体请求以节省代理带宽，请设置
+BLOCK_MEDIA=
+
+# 使用FireCrawl的自托管版本时，将此设置为您的webhook URL
+SELF_HOSTED_WEBHOOK_URL=
+
+# 用于事务性电子邮件的Resend API密钥
+RESEND_API_KEY=
+
+# LOGGING_LEVEL决定系统将输出的日志详细程度。
+# 可用级别有：
+# NONE - 不输出日志。
+# ERROR - 用于记录表示特定操作失败的错误消息。
+# WARN - 用于记录可能有害但不一定是错误的情况。
+# INFO - 用于记录突出应用程序进度的信息性消息。
+# DEBUG - 用于记录系统流程的详细信息，主要用于调试。
+# TRACE - 用于记录比DEBUG级别更详细的信息。
+# 将LOGGING_LEVEL设置为上述选项之一以控制日志输出。
+LOGGING_LEVEL=INFO
+```
+
+### 安装依赖项
+
+首先，使用pnpm安装依赖项。
+
+```bash
+# cd apps/api # 确保您在正确的文件夹中
+pnpm install # 确保您使用的是pnpm 9+版本！
+```
+
+### 运行项目
+
+您需要打开3个终端来运行服务。这里是[截至2024年10月的视频指南](https://youtu.be/LHqg5QNI4UY)（可选：4个终端用于运行服务和测试）。
+
+### 终端1 - 设置redis
+
+在项目内的任何位置运行命令
+
+```bash
+redis-server
+```
+
+### 终端2 - 设置workers
+
+现在，导航到apps/api/目录并运行：
+```bash
+pnpm run workers
+# 如果您要使用[llm-extract功能](https://github.com/mendableai/firecrawl/pull/586/)，您还应该导出OPENAI_API_KEY=sk-______
+```
+
+这将启动负责处理爬取作业的workers。
+
+### 终端3 - 设置主服务器
+
+为此，导航到apps/api/目录。如果您尚未安装pnpm，可以在此处安装：https://pnpm.io/installation
+
+接下来，使用以下命令运行服务器：
+
+```bash
+pnpm run start
+```
+
+### *（可选）* 终端4 - 发送我们的第一个请求
+
+好的，现在让我们发送我们的第一个请求。
+
+```curl
+curl -X GET http://localhost:3002/test
+``` 
+这应该返回响应Hello, world!
+
+
+如果您想测试爬取端点，可以运行
+
+```curl
+curl -X POST http://localhost:3002/v0/crawl \
+    -H 'Content-Type: application/json' \
+    -d '{
+      "url": "https://docs.firecrawl.dev"
+    }'
+```   
+    
+## 测试：
+
+最好的方法是使用`npm run test:local-no-auth`运行测试，如果您想在没有身份验证的情况下运行测试。
+
+如果您想使用身份验证运行测试，请运行`npm run test:prod`
+
+

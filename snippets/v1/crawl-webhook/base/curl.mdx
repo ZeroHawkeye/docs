@@ -1,0 +1,10 @@
+```bash cURL
+# 发送POST请求到Firecrawl API，设置webhook接收爬取结果
+curl -X POST https://api.firecrawl.dev/v1/crawl \
+    -H 'Content-Type: application/json' \
+    -H 'Authorization: Bearer YOUR_API_KEY' \
+    -d '{
+      "url": "https://docs.firecrawl.dev",
+      "limit": 100,
+      "webhook": "https://example.com/webhook"
+    }'

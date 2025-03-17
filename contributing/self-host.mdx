@@ -1,0 +1,231 @@
+---
+title: "自托管"
+description: "了解如何自托管Firecrawl以便自行运行和为项目做出贡献。"
+og:title: "自托管 | Firecrawl"
+og:description: "了解如何自托管Firecrawl以便自行运行和为项目做出贡献。"
+---
+#### 贡献者？
+
+欢迎来到[Firecrawl](https://firecrawl.dev) 🔥！以下是如何在本地获取项目以便自行运行和做出贡献的说明。
+
+如果您正在贡献代码，请注意该过程与其他开源仓库类似，即fork Firecrawl，进行更改，运行测试，提交PR。
+
+如果您有任何问题或需要帮助入门，请加入我们的Discord社区[点击这里](https://discord.gg/gSmWdAkdwd)获取更多信息，或在Github[这里](https://github.com/mendableai/firecrawl/issues/new/choose)提交问题！
+
+## 自托管Firecrawl
+
+参考[SELF_HOST.md](https://github.com/mendableai/firecrawl/blob/main/SELF_HOST.md)了解如何在本地运行它的说明。
+
+## 为什么？
+
+自托管Firecrawl对于那些有严格安全政策、要求数据保持在受控环境中的组织特别有益。以下是考虑自托管的一些关键原因：
+
+- **增强安全性和合规性：** 通过自托管，您可以确保所有数据处理符合内部和外部法规，将敏感信息保持在您的安全基础设施内。请注意，Firecrawl是Mendable的产品，依赖于SOC2 Type2认证，这意味着该平台遵循管理数据安全的高行业标准。
+- **可定制服务：** 自托管允许您定制服务，例如Playwright服务，以满足特定需求或处理标准云服务可能不支持的特定用例。
+- **学习和社区贡献：** 通过设置和维护您自己的实例，您可以更深入地了解Firecrawl的工作原理，这也可以导致对项目做出更有意义的贡献。
+
+### 注意事项
+
+然而，有一些限制和额外的责任需要注意：
+
+1. **对Fire-engine的有限访问：** 目前，Firecrawl的自托管实例无法访问Fire-engine，其中包括用于处理IP阻止、机器人检测机制等的高级功能。这意味着虽然您可以管理基本的抓取任务，但更复杂的场景可能需要额外配置或可能不受支持。
+2. **需要手动配置：** 如果您需要使用基本fetch和Playwright选项之外的抓取方法，您需要在`.env`文件中手动配置这些。这需要对技术有更深入的理解，并可能涉及更多的设置时间。
+
+自托管Firecrawl非常适合那些需要完全控制其抓取和数据处理环境的人，但需要权衡额外的维护和配置工作。
+
+## 步骤
+
+1. 首先，安装依赖项
+
+- Docker [安装说明](https://docs.docker.com/get-docker/)
+
+
+2. 设置环境变量
+
+在根目录创建一个`.env`文件，您可以从`apps/api/.env.example`复制模板
+
+开始时，我们不会设置身份验证或任何可选的子服务（PDF解析、JS阻止支持、AI功能）
+
+```
+# .env
+
+# ===== 必需的环境变量 ======
+NUM_WORKERS_PER_QUEUE=8 
+PORT=3002
+HOST=0.0.0.0
+
+#使用docker自托管时，使用redis://redis:6379。本地运行时，使用redis://localhost:6379
+REDIS_URL=redis://redis:6379
+
+#使用docker自托管时，使用redis://redis:6379。本地运行时，使用redis://localhost:6379
+REDIS_RATE_LIMIT_URL=redis://redis:6379 
+PLAYWRIGHT_MICROSERVICE_URL=http://playwright-service:3000/html
+
+## 要启用数据库身份验证，您需要设置supabase。
+USE_DB_AUTHENTICATION=false
+
+# ===== 可选的环境变量 ======
+
+# Supabase设置（用于支持数据库身份验证、高级日志记录等）
+SUPABASE_ANON_TOKEN= 
+SUPABASE_URL= 
+SUPABASE_SERVICE_TOKEN=
+
+# 其他可选项
+# 如果您已设置身份验证并想使用真实的API密钥进行测试
+TEST_API_KEY=
+# 如果您想测试抓取速率限制，请设置
+RATE_LIMIT_TEST_API_KEY_SCRAPE=
+# 如果您想测试爬取速率限制，请设置
+RATE_LIMIT_TEST_API_KEY_CRAWL=
+# 如果您想使用Scraping Bee处理JS阻止，请设置
+SCRAPING_BEE_API_KEY=
+# 添加用于LLM依赖功能（图像alt生成等）
+OPENAI_API_KEY=
+BULL_AUTH_KEY=@
+# 如果您正在使用logtail配置基本日志记录，请使用
+LOGTAIL_KEY=
+# 如果您有想用于解析PDF的llamaparse密钥，请设置
+LLAMAPARSE_API_KEY=
+# 如果您想发送slack服务器健康状态消息，请设置
+SLACK_WEBHOOK_URL=
+# 如果您想发送posthog事件（如作业日志），请设置
+POSTHOG_API_KEY=
+# 如果您想发送posthog事件（如作业日志），请设置
+POSTHOG_HOST=
+
+# 如果您想使用fire engine封闭测试版，请设置
+FIRE_ENGINE_BETA_URL=
+
+# Playwright的代理设置（或者您可以使用像oxylabs这样的代理服务，它会在每个请求上轮换IP）
+PROXY_SERVER=
+PROXY_USERNAME=
+PROXY_PASSWORD=
+# 如果您想阻止媒体请求以节省代理带宽，请设置
+BLOCK_MEDIA=
+
+# 使用FireCrawl的自托管版本时，将此设置为您的webhook URL
+SELF_HOSTED_WEBHOOK_URL=
+
+# 用于事务性电子邮件的Resend API密钥
+RESEND_API_KEY=
+
+# LOGGING_LEVEL决定系统将输出的日志详细程度。
+# 可用级别有：
+# NONE - 不输出日志。
+# ERROR - 用于记录表示特定操作失败的错误消息。
+# WARN - 用于记录可能有害但不一定是错误的情况。
+# INFO - 用于记录突出应用程序进度的信息性消息。
+# DEBUG - 用于记录系统流程的详细信息，主要用于调试。
+# TRACE - 用于记录比DEBUG级别更详细的信息。
+# 将LOGGING_LEVEL设置为上述选项之一以控制日志输出。
+LOGGING_LEVEL=INFO
+```
+
+3.  *（可选）使用TypeScript Playwright服务运行*
+    
+    *   更新`docker-compose.yml`文件以更改Playwright服务：
+        
+        ```plaintext
+            build: apps/playwright-service
+        ```
+        改为
+        ```plaintext
+            build: apps/playwright-service-ts
+        ```
+        
+    *   在您的`.env`文件中设置`PLAYWRIGHT_MICROSERVICE_URL`：
+        
+        ```plaintext
+        PLAYWRIGHT_MICROSERVICE_URL=http://localhost:3000/scrape
+        ```
+        
+    *   根据需要在`.env`文件中设置代理服务器。
+
+4.  构建并运行Docker容器：
+    
+    ```bash
+    docker compose build
+    docker compose up
+    ```
+
+这将运行一个可以在`http://localhost:3002`访问的Firecrawl本地实例。
+
+您应该能够在`http://localhost:3002/admin/@/queues`上看到Bull队列管理器UI。
+
+5. *（可选）* 测试API
+
+如果您想测试爬取端点，可以运行：
+
+  ```bash
+  curl -X POST http://localhost:3002/v0/crawl \
+      -H 'Content-Type: application/json' \
+      -d '{
+        "url": "https://docs.firecrawl.dev"
+      }'
+  ```   
+
+## 故障排除
+
+本节提供了在设置或运行自托管Firecrawl实例时可能遇到的常见问题的解决方案。
+
+### Supabase客户端未配置
+
+**症状：**
+```bash
+[YYYY-MM-DDTHH:MM:SS.SSSz]ERROR - Attempted to access Supabase client when it's not configured.
+[YYYY-MM-DDTHH:MM:SS.SSSz]ERROR - Error inserting scrape event: Error: Supabase client is not configured.
+```
+
+**解释：**
+此错误发生是因为Supabase客户端设置未完成。您应该能够正常抓取和爬取。目前在自托管实例中无法配置Supabase。
+
+### 您正在绕过身份验证
+
+**症状：**
+```bash
+[YYYY-MM-DDTHH:MM:SS.SSSz]WARN - You're bypassing authentication
+```
+
+**解释：**
+此错误发生是因为Supabase客户端设置未完成。您应该能够正常抓取和爬取。目前在自托管实例中无法配置Supabase。
+
+### Docker容器无法启动
+
+**症状：**
+Docker容器意外退出或无法启动。
+
+**解决方案：**
+使用以下命令检查Docker日志中的任何错误消息：
+```bash
+docker logs [容器名称]
+```
+
+- 确保在.env文件中正确设置了所有必需的环境变量。
+- 验证docker-compose.yml中定义的所有Docker服务是否正确配置，并且必要的镜像是否可用。
+
+### 与Redis的连接问题
+
+**症状：**
+与连接到Redis相关的错误，如超时或"连接被拒绝"。
+
+**解决方案：**
+- 确保Redis服务在您的Docker环境中启动并运行。
+- 验证.env文件中的REDIS_URL和REDIS_RATE_LIMIT_URL是否指向正确的Redis实例。
+- 检查可能阻止连接到Redis端口的网络设置和防火墙规则。
+
+### API端点无响应
+
+**症状：**
+对Firecrawl实例的API请求超时或没有响应。
+
+**解决方案：**
+- 通过检查Docker容器状态确保Firecrawl服务正在运行。
+- 验证.env文件中的PORT和HOST设置是否正确，并且没有其他服务使用相同的端口。
+- 检查网络配置以确保从发出API请求的客户端可以访问主机。
+
+通过解决这些常见问题，您可以确保自托管Firecrawl实例的设置和操作更加顺畅。
+
+## 在Kubernetes集群上安装Firecrawl（简化版本）
+
+阅读[examples/kubernetes-cluster-install/README.md](https://github.com/mendableai/firecrawl/blob/main/examples/kubernetes-cluster-install/README.md)了解如何在Kubernetes集群上安装Firecrawl的说明。

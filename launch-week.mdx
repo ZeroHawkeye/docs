@@ -1,0 +1,202 @@
+---
+title: 发布周 II (新)
+description: "查看 Firecrawl 在发布周 II (10月28日 - 11月3日) 的新功能"
+og:title: "发布周 II | Firecrawl"
+og:description: "查看 Firecrawl 在发布周 II (10月28日 - 11月3日) 的新功能"
+---
+
+import BatchScrapePython from "/snippets/v1/batch-scrape/base/python.mdx";
+import BatchScrapeNode from "/snippets/v1/batch-scrape/base/js.mdx";
+import BatchScrapeCURL from "/snippets/v1/batch-scrape/base/curl.mdx";
+import BatchScrapeOutput from "/snippets/v1/batch-scrape/base/output.mdx";
+import BatchScrapeAsyncOutput from "/snippets/v1/batch-scrape/base/async-output.mdx";
+
+import ScrapeLocationPython from "/snippets/v1/scrape/location/python.mdx";
+import ScrapeLocationNode from "/snippets/v1/scrape/location/js.mdx";
+import ScrapeLocationCURL from "/snippets/v1/scrape/location/curl.mdx";
+
+import ScrapeMobilePython from "/snippets/v1/scrape/mobile/python.mdx";
+import ScrapeMobileNode from "/snippets/v1/scrape/mobile/js.mdx";
+import ScrapeMobileCURL from "/snippets/v1/scrape/mobile/curl.mdx";
+
+import ScrapeActionsPython from "/snippets/v1/scrape/actions/python.mdx";
+import ScrapeActionsNode from "/snippets/v1/scrape/actions/js.mdx";
+import ScrapeActionsCURL from "/snippets/v1/scrape/actions/curl.mdx";
+import ScrapeActionsOutput from "/snippets/v1/scrape/actions/output.mdx";
+
+
+## 第7天 - 更快的 Markdown 解析
+
+我们从零开始重建了 Markdown 解析器，重点关注速度和性能。这一增强确保您的网页抓取任务更加高效，并提供更高质量的结果。
+
+### 新特性
+
+- **速度提升**：体验比以前快4倍的解析速度，实现更快的数据处理和减少等待时间。
+- **增强可靠性**：我们的新解析器能够更优雅地处理更广泛的 HTML 内容，减少错误并提高一致性。
+- **更清晰的 Markdown 输出**：获得更清晰、更易读的 Markdown，使您的数据更易于使用并集成到您的工作流程中。
+
+## 第6天 - 移动端抓取 (+ 移动端截图)
+
+Firecrawl 现在引入了**移动设备模拟**功能，用于抓取和截图，使您能够像使用移动设备一样与网站交互。这一功能对于测试移动端特定内容、理解响应式设计以及从移动端特定元素获取洞察至关重要。
+
+### 为什么需要移动端抓取？
+
+移动优先体验越来越普遍，此功能使您能够：
+- 获取高保真移动端截图，更准确地展示网站在移动设备上的显示效果。
+- 测试和验证移动端布局和 UI 元素，确保您对响应式网站的抓取结果准确无误。
+- 抓取仅在移动端显示的内容，获取与桌面版本不同的信息或布局。
+
+### 使用方法
+
+要激活移动端抓取，只需在请求中添加 `"mobile": true`，这将启用 Firecrawl 的移动设备模拟模式。
+
+<CodeGroup>
+<ScrapeMobilePython />
+<ScrapeMobileNode />
+<ScrapeMobileCURL />
+</CodeGroup>
+
+有关更多详细信息，包括其他配置选项，请访问 [API 参考](https://docs.firecrawl.dev/api-reference/endpoint/scrape)。
+
+
+## 第5天 - 操作 (2个新操作)
+
+Firecrawl 允许您在抓取网页内容之前对网页执行各种操作。这对于与动态内容交互、在页面间导航或访问需要用户交互的内容特别有用。
+
+我们很高兴推出两个强大的新操作：
+
+1. **抓取**：在交互序列中的任何时刻捕获当前页面内容，返回 URL 和 HTML。
+2. **等待选择器**：等待页面上出现特定元素后再继续，确保更可靠的自动化。
+
+```json
+actions = [
+    {"type": "scrape"},
+    {"type": "wait", "selector": "#my-element"},
+]
+```
+
+以下是如何使用操作导航到 google.com，搜索 Firecrawl，点击第一个结果，抓取当前页面内容并截图的示例。
+
+为了更精确的控制，您现在可以使用 `{type: "wait", selector: "#my-element"}` 来等待页面上出现特定元素。
+
+### 示例
+<CodeGroup>
+
+<ScrapeActionsPython />
+<ScrapeActionsNode /> 
+<ScrapeActionsCURL />
+
+</CodeGroup>
+### 输出
+
+<CodeGroup>
+
+<ScrapeActionsOutput />
+
+
+</CodeGroup>
+有关操作参数的更多详细信息，请参阅 [API 参考](https://docs.firecrawl.dev/api-reference/endpoint/scrape)。
+
+
+## 第4天 - 高级 iframe 抓取
+
+我们很高兴宣布 Firecrawl 全面支持 iframe 抓取。我们的抓取器现在可以无缝处理嵌套 iframe、动态加载内容和跨域框架 - 解决了网页抓取中最具挑战性的技术难题之一。
+
+### 技术创新
+
+Firecrawl 现在实现了：
+- 递归 iframe 遍历和内容提取
+- 跨域 iframe 处理，具有适当的安全上下文管理
+- 智能自动等待 iframe 内容加载
+- 支持动态注入的 iframe
+- 正确处理沙盒化的 iframe
+
+### 为什么它很重要
+
+许多现代网站使用 iframe 用于：
+- 嵌入内容和小部件
+- 支付表单和安全输入
+- 第三方集成
+- 广告框架
+- 社交媒体嵌入
+
+以前，这些元素在抓取结果中通常是黑盒。现在，您可以像访问页面的任何其他部分一样完全访问 iframe 内容。
+
+### 使用方法
+
+无需额外配置！当您使用任何抓取或爬取端点时，iframe 抓取会自动进行。无论您使用 `/scrape` 抓取单个页面还是使用 `/crawl` 抓取整个网站，iframe 内容都将无缝集成到您的结果中。
+
+## 第3天 - 信用包
+
+信用包允许您在计划用量不足时轻松充值。
+此外，我们现在提供自动充值功能，当您接近限制时自动为您的账户充值。
+要启用此功能，请访问定价页面 [https://www.firecrawl.dev/pricing](https://www.firecrawl.dev/pricing)
+
+### 信用包
+为您的项目提供灵活的月度信用额度。
+- **每月9美元可获得1000个信用额度**
+- 可添加到任何现有计划
+- 选择您需要的数量
+
+### 自动充值信用额度
+当信用额度不足时自动为您的账户充值。
+- **每1000个信用额度11美元**
+- 可在任何订阅计划中启用自动充值
+
+
+
+
+## 第2天 - 地理位置
+
+引入抓取请求的位置和语言设置。指定国家和首选语言，根据您的目标位置和语言偏好获取相关内容。
+
+### 工作原理
+
+当您指定位置设置时，Firecrawl 将使用适当的代理（如果可用）并模拟相应的语言和时区设置。默认情况下，如果未指定，位置设置为"US"。
+
+### 使用方法
+
+要使用位置和语言设置，请在请求正文中包含带有以下属性的 `location` 对象：
+
+- `country`：ISO 3166-1 alpha-2 国家代码（例如，'US'、'AU'、'DE'、'JP'）。默认为 'US'。
+- `languages`：请求的首选语言和区域设置数组，按优先级排序。默认为指定位置的语言。
+
+<CodeGroup>
+<ScrapeLocationPython />
+<ScrapeLocationNode />
+<ScrapeLocationCURL />
+</CodeGroup>
+
+## 第1天 - 批量抓取
+
+您现在可以使用我们的新批量端点同时抓取多个 URL。这非常适合当您不需要立即获取抓取结果的情况。
+
+### 工作原理
+
+它与 `/crawl` 端点的工作方式非常相似。它提交批量抓取作业并返回作业 ID，用于检查批量抓取的状态。
+
+SDK 提供了两种方法，同步和异步。同步方法将返回批量抓取作业的结果，而异步方法将返回作业 ID，您可以使用该 ID 检查批量抓取的状态。
+
+### 使用方法
+
+<CodeGroup>
+
+<BatchScrapePython />
+<BatchScrapeNode />
+<BatchScrapeCURL />
+
+</CodeGroup>
+
+### 响应
+
+如果您使用 SDK 中的同步方法，它将返回批量抓取作业的结果。否则，它将返回作业 ID，您可以使用该 ID 检查批量抓取的状态。
+
+#### 同步
+
+<BatchScrapeOutput />
+
+#### 异步
+
+然后，您可以使用作业 ID 通过调用 `/batch/scrape/{id}` 端点来检查批量抓取的状态。此端点旨在在作业仍在运行或刚刚完成时使用，**因为批量抓取作业会在24小时后过期**。
+
+<BatchScrapeAsyncOutput />

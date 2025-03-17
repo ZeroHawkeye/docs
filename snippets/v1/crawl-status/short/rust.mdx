@@ -1,0 +1,9 @@
+```rust Rust
+// 获取爬取任务状态
+let crawl_status = app.check_crawl_status(crawl_id).await;
+
+match crawl_status {
+    Ok(data) => println!("Crawl Status:\n{:#?}", data),
+    Err(e) => eprintln!("Check crawl status failed: {}", e),
+}
+```

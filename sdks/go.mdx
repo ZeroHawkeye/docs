@@ -1,0 +1,59 @@
+---
+title: 'Go'
+description: 'Firecrawl Go SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。'
+icon: 'golang'
+og:title: "Go SDK | Firecrawl"
+og:description: "Firecrawl Go SDK是Firecrawl API的封装，帮助您轻松将网站转换为markdown格式。"
+---
+
+import InstallGoSDK from "/snippets/v1/installation/go.mdx";
+import ScrapeAndCrawlGoExample from "/snippets/v1/scrape-and-crawl/go.mdx";
+import ScrapeGoShort from "/snippets/v1/scrape/short/go.mdx";
+import CrawlGoShort from "/snippets/v1/crawl/short/go.mdx";
+import CheckCrawlStatusGoShort from "/snippets/v1/crawl-status/short/go.mdx";
+import MapGoShort from "/snippets/v1/map/short/go.mdx";
+
+## 安装
+
+要安装Firecrawl Go SDK，您可以使用go get：
+
+<InstallGoSDK />
+
+## 使用方法
+
+1. 从[firecrawl.dev](https://firecrawl.dev)获取API密钥
+2. 将`API key`设置为`FirecrawlApp`结构体的参数。
+3. 设置`API URL`和/或将其作为参数传递给`FirecrawlApp`结构体。默认为`https://api.firecrawl.dev`。
+4. 设置`version`和/或将其作为参数传递给`FirecrawlApp`结构体。默认为`v1`。
+
+以下是如何使用带有错误处理的SDK的示例：
+
+<ScrapeAndCrawlGoExample />
+
+### 抓取单个URL
+
+要使用错误处理抓取单个URL，请使用`ScrapeURL`方法。它接受URL作为参数，并以字典形式返回抓取的数据。
+
+<ScrapeGoShort />
+
+### 爬取网站
+
+要爬取网站，请使用`CrawlUrl`方法。它接受起始URL和可选参数作为参数。`params`参数允许您为爬取任务指定其他选项，例如要爬取的最大页面数、允许的域名和输出格式。
+
+<CrawlGoShort />
+
+### 检查爬取状态
+
+要检查爬取任务的状态，请使用`CheckCrawlStatus`方法。它接受任务ID作为参数，并返回爬取任务的当前状态。
+
+<CheckCrawlStatusGoShort />
+
+### 映射网站
+
+使用`MapUrl`生成网站的URL列表。`params`参数允许您自定义映射过程，包括排除子域名或使用网站地图的选项。
+
+<MapGoShort />
+
+## 错误处理
+
+SDK处理Firecrawl API返回的错误并引发适当的异常。如果在请求期间发生错误，将引发带有描述性错误消息的异常。
